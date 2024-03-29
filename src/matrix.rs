@@ -24,7 +24,7 @@ impl Matrix {
     pub fn add(matrix_a: &Matrix, matrix_b: &Matrix) -> Matrix {
         assert_eq!(
             matrix_a.shape, matrix_b.shape,
-            "Cannot add two matrixs of different shapes"
+            "Cannot perform element-wise addition on two matrixs of different shapes"
         );
 
         let data = matrix_a
@@ -43,7 +43,7 @@ impl Matrix {
     pub fn mul(matrix_a: &Matrix, matrix_b: &Matrix) -> Matrix {
         assert_eq!(
             matrix_a.shape, matrix_b.shape,
-            "Cannot add two matrixs of different shapes"
+            "Cannot perform element-wise multiplication on two matrixs of different shapes"
         );
 
         let data = matrix_a
@@ -58,6 +58,30 @@ impl Matrix {
             shape: matrix_a.shape,
         }
     }
+
+    pub fn dot(matrix_a: &Matrix, matrix_b: &Matrix) -> Matrix {
+        assert_eq!(
+            matrix_a.shape.1, matrix_b.shape.0,
+            "Cannot multiply left-hand matrix with number of columns different than number of rows of right-hand matrix."
+        );
+
+        let mut data = vec![0.0; matrix_a.shape.0 * matrix_b.shape.1];
+
+        for row_a in 0..matrix_a.shape.0 {
+            for col_b in 0..matrix_b.shape.1 {
+                for k in 0..matrix_a.shape.1 {
+                    data[row_a * matrix_b.shape.1 + col_b] += matrix_a.data
+                        [row_a * matrix_a.shape.1 + k]
+                        * matrix_b.data[k * matrix_b.shape.1 + col_b]
+                }
+            }
+        }
+
+        Matrix {
+            data,
+            shape: (matrix_a.shape.0, matrix_b.shape.1),
+        }
+    }
 }
 
 #[cfg(test)]
@@ -68,6 +92,7 @@ mod tests {
     fn test_zeros() {
         let result = Matrix::zeros((2, 2));
         assert_eq!(result.data, vec![0.0, 0.0, 0.0, 0.0]);
+        assert_eq!(result.shape, (2, 2));
     }
 
     #[test]
@@ -76,6 +101,7 @@ mod tests {
         let matrix_b = Matrix::new(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
         let result = Matrix::add(&matrix_a, &matrix_b);
         assert_eq!(result.data, vec![5.0, 5.0, 5.0, 5.0]);
+        assert_eq!(result.shape, (2, 2));
     }
 
     #[test]
@@ -84,7 +110,23 @@ mod tests {
         let matrix_b = Matrix::new(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
         let result = Matrix::mul(&matrix_a, &matrix_b);
         assert_eq!(result.data, vec![4.0, 6.0, 6.0, 4.0]);
+        assert_eq!(result.shape, (2, 2));
     }
 
-    // Add more tests for multiplication, dot product, etc.
+    #[test]
+    fn test_dot_product() {
+        // Create two matrixs for the test
+        let matrix_a = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2)); // 2x2 matrix
+        let matrix_b = Matrix::new(vec![2.0, 0.0, 1.0, 3.0], (2, 2)); // 2x2 matrix
+
+        // Expected result of the dot product
+        let expected = Matrix::new(vec![4.0, 6.0, 10.0, 12.0], (2, 2)); // 2x2 matrix
+
+        // Perform the dot product
+        let result = Matrix::dot(&matrix_a, &matrix_b);
+
+        // Check if the result matches the expected outcome
+        assert_eq!(result.data, expected.data);
+        assert_eq!(result.shape, expected.shape);
+    }
 }
