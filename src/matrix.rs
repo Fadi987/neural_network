@@ -1,17 +1,25 @@
-struct Matrix {
+pub struct Matrix {
     data: Vec<f32>,
     shape: (usize, usize),
 }
 
 impl Matrix {
-    pub fn zeros(shape: (usize, usize)) -> Matrix {
+    pub fn zeros(shape: (usize, usize)) -> Self {
         Matrix {
             data: vec![0.0; shape.0 * shape.1],
             shape,
         }
     }
 
-    pub fn new(data: Vec<f32>, shape: (usize, usize)) -> Matrix {
+    pub fn random<F>(shape: (usize, usize), generator: F) -> Self
+    where
+        F: Fn() -> f32,
+    {
+        let data: Vec<f32> = (0..shape.0 * shape.1).map(|_| generator()).collect();
+        Matrix { data: data, shape }
+    }
+
+    pub fn new(data: Vec<f32>, shape: (usize, usize)) -> Self {
         assert_eq!(
             data.len(),
             shape.0 * shape.1,
@@ -21,7 +29,7 @@ impl Matrix {
         Matrix { data, shape }
     }
 
-    pub fn add(matrix_a: &Matrix, matrix_b: &Matrix) -> Matrix {
+    pub fn add(matrix_a: &Matrix, matrix_b: &Matrix) -> Self {
         assert_eq!(
             matrix_a.shape, matrix_b.shape,
             "Cannot perform element-wise addition on two matrixs of different shapes"
@@ -40,7 +48,7 @@ impl Matrix {
         }
     }
 
-    pub fn mul(matrix_a: &Matrix, matrix_b: &Matrix) -> Matrix {
+    pub fn mul(matrix_a: &Matrix, matrix_b: &Matrix) -> Self {
         assert_eq!(
             matrix_a.shape, matrix_b.shape,
             "Cannot perform element-wise multiplication on two matrixs of different shapes"
@@ -59,7 +67,7 @@ impl Matrix {
         }
     }
 
-    pub fn dot(matrix_a: &Matrix, matrix_b: &Matrix) -> Matrix {
+    pub fn dot(matrix_a: &Matrix, matrix_b: &Matrix) -> Self {
         assert_eq!(
             matrix_a.shape.1, matrix_b.shape.0,
             "Cannot multiply left-hand matrix with number of columns different than number of rows of right-hand matrix."
@@ -92,6 +100,14 @@ mod tests {
     fn test_zeros() {
         let result = Matrix::zeros((2, 2));
         assert_eq!(result.data, vec![0.0, 0.0, 0.0, 0.0]);
+        assert_eq!(result.shape, (2, 2));
+    }
+
+    #[test]
+    fn test_random() {
+        // We pass in a deterministic generator for testing
+        let result = Matrix::random((2, 2), || 1.0);
+        assert_eq!(result.data, vec![1.0, 1.0, 1.0, 1.0]);
         assert_eq!(result.shape, (2, 2));
     }
 
