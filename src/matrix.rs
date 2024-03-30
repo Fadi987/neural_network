@@ -11,9 +11,9 @@ impl Matrix {
         }
     }
 
-    pub fn random<F>(shape: (usize, usize), generator: F) -> Self
+    pub fn random<F>(shape: (usize, usize), mut generator: F) -> Self
     where
-        F: Fn() -> f32,
+        F: FnMut() -> f32,
     {
         let data: Vec<f32> = (0..shape.0 * shape.1).map(|_| generator()).collect();
         Matrix { data: data, shape }
