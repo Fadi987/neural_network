@@ -8,5 +8,8 @@ fn main() {
     let generator = || rng.gen();
 
     let matrix = matrix::Matrix::random((2, 2), generator);
+    let mut shape = matrix.get_shape();
+    shape = (3, 3);
+
     println!("{}", matrix);
 }

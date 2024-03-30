@@ -31,6 +31,15 @@ impl Matrix {
         Matrix { data, shape }
     }
 
+    pub fn get_shape(&self) -> (usize, usize) {
+        self.shape
+    }
+
+    pub fn get_value(&self, indices: (usize, usize)) -> f32 {
+        assert!(indices.0 < self.shape.0 && indices.1 < self.shape.1);
+        self.data[indices.0 * self.shape.1 + indices.1]
+    }
+
     pub fn add(matrix_a: &Matrix, matrix_b: &Matrix) -> Self {
         assert_eq!(
             matrix_a.shape, matrix_b.shape,
