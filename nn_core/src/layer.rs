@@ -1,9 +1,7 @@
 use crate::matrix;
-use rand::rngs::StdRng;
-use rand::{Rng, SeedableRng};
-
+use rand::Rng;
 trait Layer {
-    fn forward(&self) -> matrix::Matrix;
+    fn forward(&self, input: &matrix::Matrix) -> matrix::Matrix;
 }
 
 struct FullyConnectedLayer {
@@ -28,11 +26,17 @@ impl FullyConnectedLayer {
     }
 }
 
+impl Layer for FullyConnectedLayer {
+    fn forward(&self, input: &matrix::Matrix) -> matrix::Matrix {
+        matrix::Matrix::add(&matrix::Matrix::dot(&self.weights, input), &self.biases)
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use std::env::var;
-
     use super::*;
+    use rand::rngs::StdRng;
+    use rand::SeedableRng;
 
     #[test]
     fn test_fully_connected_layer_random_initialization() {
