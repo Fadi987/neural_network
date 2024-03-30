@@ -1,3 +1,5 @@
+use std::fmt;
+
 pub struct Matrix {
     data: Vec<f32>,
     shape: (usize, usize),
@@ -89,6 +91,19 @@ impl Matrix {
             data,
             shape: (matrix_a.shape.0, matrix_b.shape.1),
         }
+    }
+}
+
+impl fmt::Display for Matrix {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        for row in 0..self.shape.0 {
+            for col in 0..self.shape.1 {
+                write!(f, "{: >8.2}", self.data[row * self.shape.1 + col])?;
+            }
+            // After printing each row, add a newline
+            writeln!(f)?;
+        }
+        Ok(())
     }
 }
 
