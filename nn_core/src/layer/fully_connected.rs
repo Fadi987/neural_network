@@ -3,7 +3,7 @@ use crate::matrix;
 use rand::Rng;
 
 /// Represents a fully connected layer in a neural network.
-struct FullyConnectedLayer {
+pub struct FullyConnectedLayer {
     weights: matrix::Matrix,
     biases: matrix::Matrix,
 }
@@ -25,7 +25,7 @@ impl FullyConnectedLayer {
     /// ```
     /// use rand::rngs::StdRng;
     /// use rand::SeedableRng;
-    /// use crate::layer::FullyConnectedLayer;
+    /// use nn_core::layer::fully_connected::FullyConnectedLayer;
     ///
     /// let seed = [42; 32];
     /// let rng = StdRng::from_seed(seed);

@@ -1,11 +1,26 @@
+//! This module contains the implementation of the `Matrix` struct and its associated methods.
+
 use std::fmt;
 
+/// Represents a matrix of floating-point numbers.
 pub struct Matrix {
     data: Vec<f32>,
     shape: (usize, usize),
 }
 
 impl Matrix {
+    /// Creates a new matrix filled with zeros.
+    ///
+    /// # Arguments
+    ///
+    /// * `shape` - The shape of the matrix (number of rows, number of columns).
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use nn_core::matrix::Matrix;
+    /// let matrix = Matrix::zeros((2, 3));
+    /// ```
     pub fn zeros(shape: (usize, usize)) -> Self {
         Matrix {
             data: vec![0.0; shape.0 * shape.1],
@@ -13,6 +28,19 @@ impl Matrix {
         }
     }
 
+    /// Creates a new matrix filled with random values.
+    ///
+    /// # Arguments
+    ///
+    /// * `shape` - The shape of the matrix (number of rows, number of columns).
+    /// * `generator` - A closure that generates random values.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use nn_core::matrix::Matrix;
+    /// let matrix = Matrix::random((2, 3), || rand::random());
+    /// ```
     pub fn random<F>(shape: (usize, usize), mut generator: F) -> Self
     where
         F: FnMut() -> f32,
@@ -21,6 +49,24 @@ impl Matrix {
         Matrix { data: data, shape }
     }
 
+    /// Creates a new matrix from existing data.
+    ///
+    /// # Arguments
+    ///
+    /// * `data` - The data of the matrix, stored in row-major order.
+    /// * `shape` - The shape of the matrix (number of rows, number of columns).
+    ///
+    /// # Panics
+    ///
+    /// This function will panic if the size of the input data is not compatible with the input shape.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use nn_core::matrix::Matrix;
+    /// let data = vec![1.0, 2.0, 3.0, 4.0];
+    /// let matrix = Matrix::new(data, (2, 2));
+    /// ```
     pub fn new(data: Vec<f32>, shape: (usize, usize)) -> Self {
         assert_eq!(
             data.len(),
@@ -31,19 +77,66 @@ impl Matrix {
         Matrix { data, shape }
     }
 
+    /// Returns the shape of the matrix.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use nn_core::matrix::Matrix;
+    /// let matrix = Matrix::zeros((2, 3));
+    /// let shape = matrix.get_shape();
+    /// assert_eq!(shape, (2, 3));
+    /// ```
     pub fn get_shape(&self) -> (usize, usize) {
         self.shape
     }
 
+    /// Returns the value at the specified indices.
+    ///
+    /// # Arguments
+    ///
+    /// * `indices` - The indices of the value to retrieve (row index, column index).
+    ///
+    /// # Panics
+    ///
+    /// This function will panic if the indices are out of bounds.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use nn_core::matrix::Matrix;
+    /// let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let value = matrix.get_value((1, 0));
+    /// assert_eq!(value, 3.0);
+    /// ```
     pub fn get_value(&self, indices: (usize, usize)) -> f32 {
         assert!(indices.0 < self.shape.0 && indices.1 < self.shape.1);
         self.data[indices.0 * self.shape.1 + indices.1]
     }
 
+    /// Performs element-wise addition of two matrices.
+    ///
+    /// # Arguments
+    ///
+    /// * `matrix_a` - The first matrix.
+    /// * `matrix_b` - The second matrix.
+    ///
+    /// # Panics
+    ///
+    /// This function will panic if the shapes of the matrices are different.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use nn_core::matrix::Matrix;
+    /// let matrix_a = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let matrix_b = Matrix::new(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
+    /// let result = Matrix::add(&matrix_a, &matrix_b);
+    /// ```
     pub fn add(matrix_a: &Matrix, matrix_b: &Matrix) -> Self {
         assert_eq!(
             matrix_a.shape, matrix_b.shape,
-            "Cannot perform element-wise addition on two matrixs of different shapes"
+            "Cannot perform element-wise addition on two matrices of different shapes"
         );
 
         let data = matrix_a
@@ -59,10 +152,29 @@ impl Matrix {
         }
     }
 
+    /// Performs element-wise multiplication of two matrices.
+    ///
+    /// # Arguments
+    ///
+    /// * `matrix_a` - The first matrix.
+    /// * `matrix_b` - The second matrix.
+    ///
+    /// # Panics
+    ///
+    /// This function will panic if the shapes of the matrices are different.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use nn_core::matrix::Matrix;
+    /// let matrix_a = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let matrix_b = Matrix::new(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
+    /// let result = Matrix::mul(&matrix_a, &matrix_b);
+    /// ```
     pub fn mul(matrix_a: &Matrix, matrix_b: &Matrix) -> Self {
         assert_eq!(
             matrix_a.shape, matrix_b.shape,
-            "Cannot perform element-wise multiplication on two matrixs of different shapes"
+            "Cannot perform element-wise multiplication on two matrices of different shapes"
         );
 
         let data = matrix_a
@@ -78,6 +190,25 @@ impl Matrix {
         }
     }
 
+    /// Performs matrix multiplication of two matrices.
+    ///
+    /// # Arguments
+    ///
+    /// * `matrix_a` - The left-hand matrix.
+    /// * `matrix_b` - The right-hand matrix.
+    ///
+    /// # Panics
+    ///
+    /// This function will panic if the number of columns of `matrix_a` is different than the number of rows of `matrix_b`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use nn_core::matrix::Matrix;
+    /// let matrix_a = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let matrix_b = Matrix::new(vec![2.0, 0.0, 1.0, 3.0], (2, 2));
+    /// let result = Matrix::dot(&matrix_a, &matrix_b);
+    /// ```
     pub fn dot(matrix_a: &Matrix, matrix_b: &Matrix) -> Self {
         assert_eq!(
             matrix_a.shape.1, matrix_b.shape.0,
@@ -155,7 +286,7 @@ mod tests {
 
     #[test]
     fn test_dot_product() {
-        // Create two matrixs for the test
+        // Create two matrices for the test
         let matrix_a = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2)); // 2x2 matrix
         let matrix_b = Matrix::new(vec![2.0, 0.0, 1.0, 3.0], (2, 2)); // 2x2 matrix
 
