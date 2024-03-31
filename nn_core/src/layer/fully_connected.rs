@@ -104,4 +104,20 @@ mod tests {
             }
         }
     }
+
+    #[test]
+    fn test_fully_connected_layer_forward() {
+        let layer = FullyConnectedLayer {
+            weights: matrix::Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2)),
+            biases: matrix::Matrix::new(vec![1.0, 2.0], (2, 1)),
+        };
+
+        let input = matrix::Matrix::new(vec![1.0, 2.0], (2, 1));
+        let output =
+            matrix::Matrix::add(&matrix::Matrix::dot(&layer.weights, &input), &layer.biases);
+
+        assert_eq!(output.get_shape(), (2, 1));
+        assert_eq!(output.get_value((0, 0)), 6.0);
+        assert_eq!(output.get_value((1, 0)), 13.0);
+    }
 }
