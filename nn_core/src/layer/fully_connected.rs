@@ -2,14 +2,35 @@ use crate::layer;
 use crate::matrix;
 use rand::Rng;
 
+/// Represents a fully connected layer in a neural network.
 struct FullyConnectedLayer {
     weights: matrix::Matrix,
     biases: matrix::Matrix,
 }
 
 impl FullyConnectedLayer {
-    // TODO: add ability to use other methods of initialization
-    // Passing random rng as input allows for seeding and thus testing
+    /// Creates a new fully connected layer with the specified shape.
+    ///
+    /// # Arguments
+    ///
+    /// * `shape` - A tuple representing the shape of the layer (number of rows, number of columns).
+    /// * `rng` - A random number generator used for weight initialization.
+    ///
+    /// # Returns
+    ///
+    /// A new `FullyConnectedLayer` instance.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use rand::rngs::StdRng;
+    /// use rand::SeedableRng;
+    /// use crate::layer::FullyConnectedLayer;
+    ///
+    /// let seed = [42; 32];
+    /// let rng = StdRng::from_seed(seed);
+    /// let layer = FullyConnectedLayer::new((3, 3), rng);
+    /// ```
     pub fn new(shape: (usize, usize), mut rng: impl Rng) -> Self {
         // Xavier Glorot Initialization
         let boundary = (6.0 / ((shape.0 + shape.1) as f32)).sqrt();
@@ -25,6 +46,15 @@ impl FullyConnectedLayer {
 }
 
 impl layer::Layer for FullyConnectedLayer {
+    /// Performs the forward pass of the fully connected layer.
+    ///
+    /// # Arguments
+    ///
+    /// * `input` - The input matrix to the layer.
+    ///
+    /// # Returns
+    ///
+    /// The output matrix of the layer.
     fn forward(&self, input: &matrix::Matrix) -> matrix::Matrix {
         matrix::Matrix::add(&matrix::Matrix::dot(&self.weights, input), &self.biases)
     }
