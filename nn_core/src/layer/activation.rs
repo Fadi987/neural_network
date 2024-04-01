@@ -71,33 +71,33 @@ mod tests {
         let input = Matrix::new(vec![-1.0, 0.0, 1.0, 2.0], (2, 2));
         let output = layer.forward(&input);
 
-        assert!((output.get_value((0, 0)) - 0.2689414).abs() < 1e-4);
-        assert!((output.get_value((0, 1)) - 0.5).abs() < 1e-4);
-        assert!((output.get_value((1, 0)) - 0.7310586).abs() < 1e-4);
-        assert!((output.get_value((1, 1)) - 0.8807971).abs() < 1e-4);
+        assert!((output.get_value((0, 0)) - 0.2689).abs() < 1e-4);
+        assert!((output.get_value((0, 1)) - 0.5000).abs() < 1e-4);
+        assert!((output.get_value((1, 0)) - 0.7310).abs() < 1e-4);
+        assert!((output.get_value((1, 1)) - 0.8807).abs() < 1e-4);
     }
 
     #[test]
     fn test_sigmoid() {
-        assert!((sigmoid(-1.0) - 0.2689414).abs() < 1e-4);
-        assert!((sigmoid(0.0) - 0.5).abs() < 1e-4);
-        assert!((sigmoid(1.0) - 0.7310586).abs() < 1e-4);
-        assert!((sigmoid(2.0) - 0.8807971).abs() < 1e-4);
+        assert!((sigmoid(-1.0) - 0.2689).abs() < 1e-4);
+        assert!((sigmoid(0.0) - 0.5000).abs() < 1e-4);
+        assert!((sigmoid(1.0) - 0.7310).abs() < 1e-4);
+        assert!((sigmoid(2.0) - 0.8807).abs() < 1e-4);
     }
 
     #[test]
     fn test_tanh() {
-        assert!((tanh(-1.0) - -0.76159416).abs() < 1e-4);
-        assert!((tanh(0.0) - 0.0).abs() < 1e-4);
-        assert!((tanh(1.0) - 0.76159416).abs() < 1e-4);
-        assert!((tanh(2.0) - 0.9640276).abs() < 1e-4);
+        assert!((tanh(-1.0) - -0.7615).abs() < 1e-4);
+        assert!((tanh(0.0) - 0.0000).abs() < 1e-4);
+        assert!((tanh(1.0) - 0.7615).abs() < 1e-4);
+        assert!((tanh(2.0) - 0.9640).abs() < 1e-4);
     }
 
     #[test]
     fn test_relu() {
-        assert!((relu(-1.0) - 0.0).abs() < 1e-4);
-        assert!((relu(0.0) - 0.0).abs() < 1e-4);
-        assert!((relu(1.0) - 1.0).abs() < 1e-4);
-        assert!((relu(2.0) - 2.0).abs() < 1e-4);
+        assert!((relu(-1.0) - 0.0000).abs() < 1e-4);
+        assert!((relu(0.0) - 0.0000).abs() < 1e-4);
+        assert!((relu(1.0) - 1.0000).abs() < 1e-4);
+        assert!((relu(2.0) - 2.0000).abs() < 1e-4);
     }
 }
