@@ -3,6 +3,7 @@
 use std::fmt;
 
 /// Represents a matrix of floating-point numbers.
+#[derive(Clone)]
 pub struct Matrix {
     data: Vec<f32>,
     shape: (usize, usize),
