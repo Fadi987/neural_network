@@ -58,6 +58,10 @@ impl Layer for ActivationLayer {
 
         Matrix::new(data, input.get_shape())
     }
+
+    fn backward(&self, gradient: &crate::matrix::Matrix) -> crate::matrix::Matrix {
+        unimplemented!()
+    }
 }
 
 #[cfg(test)]

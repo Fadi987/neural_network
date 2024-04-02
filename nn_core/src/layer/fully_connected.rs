@@ -58,6 +58,10 @@ impl layer::Layer for FullyConnectedLayer {
     fn forward(&self, input: &matrix::Matrix) -> matrix::Matrix {
         matrix::Matrix::add(&matrix::Matrix::dot(&self.weights, input), &self.biases)
     }
+
+    fn backward(&self, gradient: &matrix::Matrix) -> matrix::Matrix {
+        unimplemented!()
+    }
 }
 
 #[cfg(test)]

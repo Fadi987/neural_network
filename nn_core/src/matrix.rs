@@ -115,6 +115,31 @@ impl Matrix {
         self.data[indices.0 * self.shape.1 + indices.1]
     }
 
+    /// Transposes the matrix.
+    ///
+    /// # Returns
+    ///
+    /// The transposed matrix.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use nn_core::matrix::Matrix;
+    /// let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let transposed = matrix.transpose();
+    /// ```
+    pub fn transpose(&self) -> Self {
+        let data = (0..self.shape.1)
+            .flat_map(|j| (0..self.shape.0).map(move |i| (i, j)))
+            .map(|indices| self.get_value(indices))
+            .collect();
+
+        Matrix {
+            data,
+            shape: (self.shape.1, self.shape.0),
+        }
+    }
+
     /// Performs element-wise addition of two matrices.
     ///
     /// # Arguments
@@ -264,6 +289,14 @@ mod tests {
         // We pass in a deterministic generator for testing
         let result = Matrix::random((2, 2), || 1.0);
         assert_eq!(result.data, vec![1.0, 1.0, 1.0, 1.0]);
+        assert_eq!(result.shape, (2, 2));
+    }
+
+    #[test]
+    fn test_transpose() {
+        let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+        let result = matrix.transpose();
+        assert_eq!(result.data, vec![1.0, 3.0, 2.0, 4.0]);
         assert_eq!(result.shape, (2, 2));
     }
 
