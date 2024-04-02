@@ -60,7 +60,7 @@ impl layer::Layer for FullyConnectedLayer {
     }
 
     fn backward(&self, gradient: &matrix::Matrix) -> matrix::Matrix {
-        unimplemented!()
+        matrix::Matrix::dot(&self.weights.transpose(), gradient)
     }
 }
 
