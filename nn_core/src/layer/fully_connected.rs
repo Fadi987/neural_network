@@ -156,4 +156,45 @@ mod tests {
         assert_eq!(output.get_value((0, 0)), 6.0);
         assert_eq!(output.get_value((1, 0)), 13.0);
     }
+
+    #[test]
+    fn test_fully_connected_layer_backward() {
+        let mut layer = FullyConnectedLayer {
+            weights: matrix::Matrix::new(vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0], (2, 3)),
+            biases: matrix::Matrix::new(vec![1.0, 2.0], (2, 1)),
+            weights_gradient: None,
+            biases_gradient: None,
+            forward_pass_input: None,
+        };
+
+        let input = matrix::Matrix::new(vec![1.0, 2.0, 3.0], (3, 1));
+        let output = layer.forward(&input);
+
+        assert_eq!(output.get_shape(), (2, 1));
+        assert_eq!(output.get_value((0, 0)), 15.0);
+        assert_eq!(output.get_value((1, 0)), 34.0);
+
+        let gradient = matrix::Matrix::new(vec![1.0, 2.0], (2, 1));
+        let backward_output = layer.backward(&gradient);
+
+        assert_eq!(backward_output.get_shape(), (3, 1));
+        assert_eq!(backward_output.get_value((0, 0)), 9.0);
+        assert_eq!(backward_output.get_value((1, 0)), 12.0);
+        assert_eq!(backward_output.get_value((2, 0)), 15.0);
+
+        let w_gradient = layer.weights_gradient.unwrap();
+
+        assert_eq!(w_gradient.get_shape(), (2, 3));
+        assert_eq!(w_gradient.get_value((0, 0)), 1.0);
+        assert_eq!(w_gradient.get_value((0, 1)), 2.0);
+        assert_eq!(w_gradient.get_value((0, 2)), 3.0);
+        assert_eq!(w_gradient.get_value((1, 0)), 2.0);
+        assert_eq!(w_gradient.get_value((1, 1)), 4.0);
+        assert_eq!(w_gradient.get_value((1, 2)), 6.0);
+
+        let b_gradient = layer.biases_gradient.unwrap();
+        assert_eq!(b_gradient.get_shape(), (2, 1));
+        assert_eq!(b_gradient.get_value((0, 0)), 1.0);
+        assert_eq!(b_gradient.get_value((1, 0)), 2.0);
+    }
 }
