@@ -97,6 +97,7 @@ impl layer::Layer for FullyConnectedLayer {
 mod tests {
     use super::*;
     use crate::layer::Layer;
+    use approx::{assert_relative_eq, assert_relative_ne};
     use rand::rngs::StdRng;
     use rand::SeedableRng;
 
@@ -115,8 +116,6 @@ mod tests {
                 .map(|indices| layer.weights.get_value(indices))
                 .collect();
 
-            println!("{:?}", layer_values);
-
             // Asserts values are in [-1.0, 1.0] which should be true for Xavier/Clorot initialization in case of a layer of size (3, 2)
             for value in &layer_values {
                 assert!(value.abs() <= 1.0);
@@ -132,7 +131,7 @@ mod tests {
             match previous_weight_variance {
                 None => previous_weight_variance = Some(variance),
                 Some(prev_variance) => {
-                    assert!((prev_variance - variance).abs() > 1e-7);
+                    assert_relative_ne!(prev_variance, variance, epsilon = 1e-4);
                     previous_weight_variance = Some(variance);
                 }
             }
@@ -153,8 +152,8 @@ mod tests {
         let output = layer.forward(&input);
 
         assert_eq!(output.get_shape(), (2, 1));
-        assert_eq!(output.get_value((0, 0)), 6.0);
-        assert_eq!(output.get_value((1, 0)), 13.0);
+        assert_relative_eq!(output.get_value((0, 0)), 6.0, epsilon = 1e-4);
+        assert_relative_eq!(output.get_value((1, 0)), 13.0, epsilon = 1e-4);
     }
 
     #[test]
@@ -171,30 +170,30 @@ mod tests {
         let output = layer.forward(&input);
 
         assert_eq!(output.get_shape(), (2, 1));
-        assert_eq!(output.get_value((0, 0)), 15.0);
-        assert_eq!(output.get_value((1, 0)), 34.0);
+        assert_relative_eq!(output.get_value((0, 0)), 15.0, epsilon = 1e-4);
+        assert_relative_eq!(output.get_value((1, 0)), 34.0, epsilon = 1e-4);
 
         let gradient = matrix::Matrix::new(vec![1.0, 2.0], (2, 1));
         let backward_output = layer.backward(&gradient);
 
         assert_eq!(backward_output.get_shape(), (3, 1));
-        assert_eq!(backward_output.get_value((0, 0)), 9.0);
-        assert_eq!(backward_output.get_value((1, 0)), 12.0);
-        assert_eq!(backward_output.get_value((2, 0)), 15.0);
+        assert_relative_eq!(backward_output.get_value((0, 0)), 9.0, epsilon = 1e-4);
+        assert_relative_eq!(backward_output.get_value((1, 0)), 12.0, epsilon = 1e-4);
+        assert_relative_eq!(backward_output.get_value((2, 0)), 15.0, epsilon = 1e-4);
 
         let w_gradient = layer.weights_gradient.unwrap();
 
         assert_eq!(w_gradient.get_shape(), (2, 3));
-        assert_eq!(w_gradient.get_value((0, 0)), 1.0);
-        assert_eq!(w_gradient.get_value((0, 1)), 2.0);
-        assert_eq!(w_gradient.get_value((0, 2)), 3.0);
-        assert_eq!(w_gradient.get_value((1, 0)), 2.0);
-        assert_eq!(w_gradient.get_value((1, 1)), 4.0);
-        assert_eq!(w_gradient.get_value((1, 2)), 6.0);
+        assert_relative_eq!(w_gradient.get_value((0, 0)), 1.0, epsilon = 1e-4);
+        assert_relative_eq!(w_gradient.get_value((0, 1)), 2.0, epsilon = 1e-4);
+        assert_relative_eq!(w_gradient.get_value((0, 2)), 3.0, epsilon = 1e-4);
+        assert_relative_eq!(w_gradient.get_value((1, 0)), 2.0, epsilon = 1e-4);
+        assert_relative_eq!(w_gradient.get_value((1, 1)), 4.0, epsilon = 1e-4);
+        assert_relative_eq!(w_gradient.get_value((1, 2)), 6.0, epsilon = 1e-4);
 
         let b_gradient = layer.biases_gradient.unwrap();
         assert_eq!(b_gradient.get_shape(), (2, 1));
-        assert_eq!(b_gradient.get_value((0, 0)), 1.0);
-        assert_eq!(b_gradient.get_value((1, 0)), 2.0);
+        assert_relative_eq!(b_gradient.get_value((0, 0)), 1.0, epsilon = 1e-4);
+        assert_relative_eq!(b_gradient.get_value((1, 0)), 2.0, epsilon = 1e-4);
     }
 }

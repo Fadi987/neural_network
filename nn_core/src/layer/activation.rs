@@ -96,6 +96,7 @@ impl Layer for ActivationLayer {
 mod tests {
     use super::*;
     use crate::matrix::Matrix;
+    use approx::assert_relative_eq;
 
     #[test]
     fn test_activation_layer_forward() {
@@ -103,33 +104,33 @@ mod tests {
         let input = Matrix::new(vec![-1.0, 0.0, 1.0, 2.0], (2, 2));
         let output = layer.forward(&input);
 
-        assert!((output.get_value((0, 0)) - 0.2689).abs() < 1e-4);
-        assert!((output.get_value((0, 1)) - 0.5000).abs() < 1e-4);
-        assert!((output.get_value((1, 0)) - 0.7310).abs() < 1e-4);
-        assert!((output.get_value((1, 1)) - 0.8807).abs() < 1e-4);
+        assert_relative_eq!(output.get_value((0, 0)), 0.2689, epsilon = 1e-4);
+        assert_relative_eq!(output.get_value((0, 1)), 0.5000, epsilon = 1e-4);
+        assert_relative_eq!(output.get_value((1, 0)), 0.7310, epsilon = 1e-4);
+        assert_relative_eq!(output.get_value((1, 1)), 0.8807, epsilon = 1e-4);
     }
 
     #[test]
     fn test_sigmoid() {
-        assert!((sigmoid(-1.0) - 0.2689).abs() < 1e-4);
-        assert!((sigmoid(0.0) - 0.5000).abs() < 1e-4);
-        assert!((sigmoid(1.0) - 0.7310).abs() < 1e-4);
-        assert!((sigmoid(2.0) - 0.8807).abs() < 1e-4);
+        assert_relative_eq!(sigmoid(-1.0), 0.2689, epsilon = 1e-4);
+        assert_relative_eq!(sigmoid(0.0), 0.5000, epsilon = 1e-4);
+        assert_relative_eq!(sigmoid(1.0), 0.7310, epsilon = 1e-4);
+        assert_relative_eq!(sigmoid(2.0), 0.8807, epsilon = 1e-4);
     }
 
     #[test]
     fn test_tanh() {
-        assert!((tanh(-1.0) - -0.7615).abs() < 1e-4);
-        assert!((tanh(0.0) - 0.0000).abs() < 1e-4);
-        assert!((tanh(1.0) - 0.7615).abs() < 1e-4);
-        assert!((tanh(2.0) - 0.9640).abs() < 1e-4);
+        assert_relative_eq!(tanh(-1.0), -0.7615, epsilon = 1e-4);
+        assert_relative_eq!(tanh(0.0), 0.0000, epsilon = 1e-4);
+        assert_relative_eq!(tanh(1.0), 0.7615, epsilon = 1e-4);
+        assert_relative_eq!(tanh(2.0), 0.9640, epsilon = 1e-4);
     }
 
     #[test]
     fn test_relu() {
-        assert!((relu(-1.0) - 0.0000).abs() < 1e-4);
-        assert!((relu(0.0) - 0.0000).abs() < 1e-4);
-        assert!((relu(1.0) - 1.0000).abs() < 1e-4);
-        assert!((relu(2.0) - 2.0000).abs() < 1e-4);
+        assert_relative_eq!(relu(-1.0), 0.0000, epsilon = 1e-4);
+        assert_relative_eq!(relu(0.0), 0.0000, epsilon = 1e-4);
+        assert_relative_eq!(relu(1.0), 1.0000, epsilon = 1e-4);
+        assert_relative_eq!(relu(2.0), 2.0000, epsilon = 1e-4);
     }
 }
