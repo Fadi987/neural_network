@@ -16,7 +16,9 @@ impl NeuralNetwork {
         self.layers.push(Box::new(layer));
     }
 
+    /// Performs the forward pass of the neural network.
     pub fn forward(&mut self, input: &matrix::Matrix) -> matrix::Matrix {
+        // TODO: understand usage of &mut
         let mut intermediate_result = input.clone();
 
         for layer in self.layers.iter_mut() {
