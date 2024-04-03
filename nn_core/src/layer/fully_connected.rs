@@ -6,6 +6,11 @@ use rand::Rng;
 pub struct FullyConnectedLayer {
     weights: matrix::Matrix,
     biases: matrix::Matrix,
+
+    // Temporary storage for backpropagation
+    weights_gradient: Option<matrix::Matrix>,
+    biases_gradient: Option<matrix::Matrix>,
+    forward_pass_input: Option<matrix::Matrix>,
 }
 
 impl FullyConnectedLayer {
@@ -41,6 +46,9 @@ impl FullyConnectedLayer {
         FullyConnectedLayer {
             weights,
             biases: matrix::Matrix::new(vec![0.0; shape.0], (shape.0, 1)),
+            weights_gradient: None,
+            biases_gradient: None,
+            forward_pass_input: None,
         }
     }
 }
@@ -55,11 +63,32 @@ impl layer::Layer for FullyConnectedLayer {
     /// # Returns
     ///
     /// The output matrix of the layer.
-    fn forward(&self, input: &matrix::Matrix) -> matrix::Matrix {
+    fn forward(&mut self, input: &matrix::Matrix) -> matrix::Matrix {
+        self.forward_pass_input = Some(input.clone());
         matrix::Matrix::add(&matrix::Matrix::dot(&self.weights, input), &self.biases)
     }
 
-    fn backward(&self, gradient: &matrix::Matrix) -> matrix::Matrix {
+    /// Performs the backward pass of the fully connected layer.
+    ///
+    /// # Arguments
+    ///
+    /// * `gradient` - The gradient matrix/vector from the next layer.
+    ///
+    /// # Returns
+    ///
+    /// The gradient matrix/vector for the current layer.
+    fn backward(&mut self, gradient: &matrix::Matrix) -> matrix::Matrix {
+        match &self.forward_pass_input {
+            None => panic!("No forward pass input found."),
+            Some(forward_pass_input) => {
+                self.weights_gradient = Some(matrix::Matrix::dot(
+                    gradient,
+                    &forward_pass_input.transpose(),
+                ));
+                self.biases_gradient = Some(gradient.clone());
+            }
+        }
+
         matrix::Matrix::dot(&self.weights.transpose(), gradient)
     }
 }
@@ -67,6 +96,7 @@ impl layer::Layer for FullyConnectedLayer {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::layer::Layer;
     use rand::rngs::StdRng;
     use rand::SeedableRng;
 
@@ -111,14 +141,16 @@ mod tests {
 
     #[test]
     fn test_fully_connected_layer_forward() {
-        let layer = FullyConnectedLayer {
+        let mut layer = FullyConnectedLayer {
             weights: matrix::Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2)),
             biases: matrix::Matrix::new(vec![1.0, 2.0], (2, 1)),
+            weights_gradient: None,
+            biases_gradient: None,
+            forward_pass_input: None,
         };
 
         let input = matrix::Matrix::new(vec![1.0, 2.0], (2, 1));
-        let output =
-            matrix::Matrix::add(&matrix::Matrix::dot(&layer.weights, &input), &layer.biases);
+        let output = layer.forward(&input);
 
         assert_eq!(output.get_shape(), (2, 1));
         assert_eq!(output.get_value((0, 0)), 6.0);
