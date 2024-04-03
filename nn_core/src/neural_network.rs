@@ -16,10 +16,14 @@ impl NeuralNetwork {
         self.layers.push(Box::new(layer));
     }
 
-    pub fn forward(&self, input: &matrix::Matrix) -> matrix::Matrix {
-        self.layers
-            .iter()
-            .fold(input.clone(), |acc, layer| layer.forward(&acc))
+    pub fn forward(&mut self, input: &matrix::Matrix) -> matrix::Matrix {
+        let mut intermediate_result = input.clone();
+
+        for layer in self.layers.iter_mut() {
+            intermediate_result = layer.forward(&intermediate_result);
+        }
+
+        intermediate_result
     }
 }
 

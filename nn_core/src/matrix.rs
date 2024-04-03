@@ -258,6 +258,26 @@ impl Matrix {
             shape: (matrix_a.shape.0, matrix_b.shape.1),
         }
     }
+
+    /// Applies a function element-wise to the matrix.
+    ///
+    /// # Arguments
+    ///
+    /// * `f` - The function to apply to each element of the matrix.
+    ///
+    /// # Returns
+    ///
+    /// The resulting matrix after applying the function element-wise.
+    pub fn map<F>(&self, mut f: F) -> Self
+    where
+        F: Fn(f32) -> f32,
+    {
+        let data = self.data.iter().map(|&x| f(x)).collect();
+        Matrix {
+            data,
+            shape: self.shape,
+        }
+    }
 }
 
 impl fmt::Display for Matrix {
@@ -315,6 +335,15 @@ mod tests {
         let matrix_b = Matrix::new(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
         let result = Matrix::mul(&matrix_a, &matrix_b);
         assert_eq!(result.data, vec![4.0, 6.0, 6.0, 4.0]);
+        assert_eq!(result.shape, (2, 2));
+    }
+
+    // Test applying a function element-wise to a matrix
+    #[test]
+    fn test_map() {
+        let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+        let result = matrix.map(|x| x * 2.0);
+        assert_eq!(result.data, vec![2.0, 4.0, 6.0, 8.0]);
         assert_eq!(result.shape, (2, 2));
     }
 
