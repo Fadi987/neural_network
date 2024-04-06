@@ -178,6 +178,44 @@ impl Matrix {
         }
     }
 
+    /// Performs element-wise subtraction of two matrices.
+    ///
+    /// # Arguments
+    ///
+    /// * `matrix_a` - The first matrix.
+    /// * `matrix_b` - The second matrix.
+    ///
+    /// # Panics
+    ///
+    /// This function will panic if the shapes of the matrices are different.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use nn_core::matrix::Matrix;
+    /// let matrix_a = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let matrix_b = Matrix::new(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
+    /// let result = Matrix::sub(&matrix_a, &matrix_b);
+    /// ```
+    pub fn sub(matrix_a: &Matrix, matrix_b: &Matrix) -> Self {
+        assert_eq!(
+            matrix_a.shape, matrix_b.shape,
+            "Cannot perform element-wise subtraction on two matrices of different shapes"
+        );
+
+        let data = matrix_a
+            .data
+            .iter()
+            .zip(matrix_b.data.iter())
+            .map(|(a, b)| a - b)
+            .collect();
+
+        Matrix {
+            data,
+            shape: matrix_a.shape,
+        }
+    }
+
     /// Performs element-wise multiplication of two matrices.
     ///
     /// # Arguments
@@ -326,6 +364,15 @@ mod tests {
         let matrix_b = Matrix::new(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
         let result = Matrix::add(&matrix_a, &matrix_b);
         assert_eq!(result.data, vec![5.0, 5.0, 5.0, 5.0]);
+        assert_eq!(result.shape, (2, 2));
+    }
+
+    #[test]
+    fn test_subtraction() {
+        let matrix_a = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+        let matrix_b = Matrix::new(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
+        let result = Matrix::sub(&matrix_a, &matrix_b);
+        assert_eq!(result.data, vec![-3.0, -1.0, 1.0, 3.0]);
         assert_eq!(result.shape, (2, 2));
     }
 
