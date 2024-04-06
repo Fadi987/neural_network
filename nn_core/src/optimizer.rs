@@ -28,7 +28,6 @@ impl<T: cost_function::CostFunction> Optimizer<T> {
         Optimizer {
             learning_rate,
             cost_function: Box::new(cost_function),
-            neural_network,
         }
     }
 
