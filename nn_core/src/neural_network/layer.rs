@@ -8,4 +8,6 @@ pub trait Layer {
     fn forward(&mut self, input: &matrix::Matrix) -> matrix::Matrix;
 
     fn backward(&mut self, gradient: &matrix::Matrix) -> matrix::Matrix;
+
+    fn update(&mut self, learning_rate: f32);
 }

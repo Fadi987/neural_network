@@ -90,6 +90,30 @@ impl crate::neural_network::layer::Layer for FullyConnectedLayer {
 
         matrix::Matrix::dot(&self.weights.transpose(), gradient)
     }
+
+    /// Updates the weights and biases of the fully connected layer.
+    ///
+    /// # Arguments
+    ///
+    /// * `learning_rate` - The learning rate to use for the update.
+    fn update(&mut self, learning_rate: f32) {
+        let weights_gradient = self.weights_gradient.as_ref().unwrap();
+        let biases_gradient = self.biases_gradient.as_ref().unwrap();
+
+        self.weights = matrix::Matrix::sub(
+            &self.weights,
+            &matrix::Matrix::mul_scalar(weights_gradient, learning_rate),
+        );
+
+        self.biases = matrix::Matrix::sub(
+            &self.biases,
+            &matrix::Matrix::mul_scalar(biases_gradient, learning_rate),
+        );
+
+        self.weights_gradient = None;
+        self.biases_gradient = None;
+        self.forward_pass_input = None;
+    }
 }
 
 #[cfg(test)]
@@ -194,5 +218,36 @@ mod tests {
         assert_eq!(b_gradient.get_shape(), (2, 1));
         assert_relative_eq!(b_gradient.get_value((0, 0)), 1.0, epsilon = 1e-4);
         assert_relative_eq!(b_gradient.get_value((1, 0)), 2.0, epsilon = 1e-4);
+    }
+
+    #[test]
+    fn test_fully_connected_layer_update() {
+        let mut layer = FullyConnectedLayer {
+            weights: matrix::Matrix::new(vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0], (2, 3)),
+            biases: matrix::Matrix::new(vec![1.0, 2.0], (2, 1)),
+            weights_gradient: Some(matrix::Matrix::new(
+                vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0],
+                (2, 3),
+            )),
+            biases_gradient: Some(matrix::Matrix::new(vec![1.0, 2.0], (2, 1))),
+            forward_pass_input: None,
+        };
+
+        let learning_rate = 0.1;
+        layer.update(learning_rate);
+
+        assert_eq!(layer.weights_gradient.is_none(), true);
+        assert_eq!(layer.biases_gradient.is_none(), true);
+        assert_eq!(layer.forward_pass_input.is_none(), true);
+
+        assert_relative_eq!(layer.weights.get_value((0, 0)), 0.9, epsilon = 1e-4);
+        assert_relative_eq!(layer.weights.get_value((0, 1)), 1.8, epsilon = 1e-4);
+        assert_relative_eq!(layer.weights.get_value((0, 2)), 2.7, epsilon = 1e-4);
+        assert_relative_eq!(layer.weights.get_value((1, 0)), 3.6, epsilon = 1e-4);
+        assert_relative_eq!(layer.weights.get_value((1, 1)), 4.5, epsilon = 1e-4);
+        assert_relative_eq!(layer.weights.get_value((1, 2)), 5.4, epsilon = 1e-4);
+
+        assert_relative_eq!(layer.biases.get_value((0, 0)), 0.9, epsilon = 1e-4);
+        assert_relative_eq!(layer.biases.get_value((1, 0)), 1.8, epsilon = 1e-4);
     }
 }

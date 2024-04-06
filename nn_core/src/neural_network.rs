@@ -1,7 +1,7 @@
 use crate::matrix;
 pub mod layer;
 
-struct NeuralNetwork {
+pub struct NeuralNetwork {
     layers: Vec<Box<dyn layer::Layer>>,
 }
 
@@ -37,6 +37,13 @@ impl NeuralNetwork {
         }
 
         intermediate_result
+    }
+
+    /// Updates the weights and biases of the neural network.
+    pub fn update(&mut self, learning_rate: f32) {
+        for layer in self.layers.iter_mut() {
+            layer.update(learning_rate);
+        }
     }
 }
 
