@@ -20,11 +20,7 @@ impl<T: cost_function::CostFunction> Optimizer<T> {
     /// # Returns
     ///
     /// A new `Optimizer` instance.
-    pub fn new(
-        learning_rate: f32,
-        cost_function: T,
-        neural_network: neural_network::NeuralNetwork,
-    ) -> Self {
+    pub fn new(learning_rate: f32, cost_function: T) -> Self {
         Optimizer {
             learning_rate,
             cost_function: Box::new(cost_function),

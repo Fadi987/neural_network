@@ -91,7 +91,7 @@ impl Layer for ActivationLayer {
         }
     }
 
-    fn update(&mut self, learning_rate: f32) {
+    fn update(&mut self, _: f32) {
         // Activation layers do not have any parameters to update.
     }
 }
