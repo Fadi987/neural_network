@@ -367,6 +367,19 @@ impl Matrix {
         }
     }
 
+    /// Multiplies all the elements of the matrix by a scalar.
+    ///
+    /// # Arguments
+    ///
+    /// * `scalar` - The scalar to multiply the elements of the matrix by.
+    ///
+    /// # Returns
+    ///
+    /// The resulting matrix after multiplying all the elements by the scalar.
+    pub fn mul_scalar(&self, scalar: f32) -> Self {
+        self.map(|x| x * scalar)
+    }
+
     /// Sums all the elements of the matrix.
     ///
     /// # Returns
@@ -474,6 +487,14 @@ mod tests {
     fn test_map() {
         let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
         let result = matrix.map(|x| x * 2.0);
+        assert_eq!(result.data, vec![2.0, 4.0, 6.0, 8.0]);
+        assert_eq!(result.shape, (2, 2));
+    }
+
+    #[test]
+    fn test_mul_scalar() {
+        let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+        let result = matrix.mul_scalar(2.0);
         assert_eq!(result.data, vec![2.0, 4.0, 6.0, 8.0]);
         assert_eq!(result.shape, (2, 2));
     }
