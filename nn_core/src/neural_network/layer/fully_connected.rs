@@ -1,4 +1,3 @@
-use crate::layer;
 use crate::matrix;
 use rand::Rng;
 
@@ -30,7 +29,7 @@ impl FullyConnectedLayer {
     /// ```
     /// use rand::rngs::StdRng;
     /// use rand::SeedableRng;
-    /// use nn_core::layer::fully_connected::FullyConnectedLayer;
+    /// use nn_core::neural_network::layer::fully_connected::FullyConnectedLayer;
     ///
     /// let seed = [42; 32];
     /// let mut rng = StdRng::from_seed(seed);
@@ -53,7 +52,7 @@ impl FullyConnectedLayer {
     }
 }
 
-impl layer::Layer for FullyConnectedLayer {
+impl crate::neural_network::layer::Layer for FullyConnectedLayer {
     /// Performs the forward pass of the fully connected layer.
     ///
     /// # Arguments
@@ -96,7 +95,7 @@ impl layer::Layer for FullyConnectedLayer {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::layer::Layer;
+    use crate::neural_network::layer::Layer;
     use approx::{assert_relative_eq, assert_relative_ne};
     use rand::rngs::StdRng;
     use rand::SeedableRng;

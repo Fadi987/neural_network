@@ -1,5 +1,5 @@
-use crate::cost_function::CostFunction;
 use crate::matrix;
+use crate::optimizer::cost_function::CostFunction;
 
 /// Represents the squared error cost function.
 struct SquaredError;

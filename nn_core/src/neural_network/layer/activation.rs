@@ -1,9 +1,9 @@
+use crate::matrix;
 /// This module contains the implementation of activation functions and an activation layer.
 /// Activation functions are mathematical functions that introduce non-linearity to neural networks.
 /// The activation layer applies an activation function element-wise to the input matrix.
 /// Supported activation functions are Sigmoid, ReLU, and Tanh.
-use crate::layer::Layer;
-use crate::matrix;
+use crate::neural_network::layer::Layer;
 
 /// Enum representing different activation functions.
 pub enum ActivationFunction {

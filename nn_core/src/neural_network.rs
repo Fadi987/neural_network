@@ -1,8 +1,8 @@
-use crate::layer::Layer;
 use crate::matrix;
+pub mod layer;
 
 struct NeuralNetwork {
-    layers: Vec<Box<dyn Layer>>,
+    layers: Vec<Box<dyn layer::Layer>>,
 }
 
 /// Represents a neural network.
@@ -12,7 +12,7 @@ impl NeuralNetwork {
         NeuralNetwork { layers: Vec::new() }
     }
 
-    pub fn add_layer<L: Layer + 'static>(&mut self, layer: L) {
+    pub fn add_layer<L: layer::Layer + 'static>(&mut self, layer: L) {
         self.layers.push(Box::new(layer));
     }
 
@@ -43,7 +43,7 @@ impl NeuralNetwork {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::layer::{activation, fully_connected};
+    use layer::{activation, fully_connected};
     use rand::rngs::StdRng;
     use rand::SeedableRng;
 
