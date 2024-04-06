@@ -13,7 +13,7 @@ pub trait CostFunction {
     /// # Returns
     ///
     /// The computed cost as a `f32` value.
-    fn compute(input: &Matrix, target: &Matrix) -> f32;
+    fn compute(&mut self, input: &Matrix, target: &Matrix) -> f32;
 
     /// Computes the gradient of the cost function with respect to the input matrix.
     ///
@@ -25,5 +25,5 @@ pub trait CostFunction {
     /// # Returns
     ///
     /// The computed gradient as a `Matrix`.
-    fn gradient(input: &Matrix, target: &Matrix) -> Matrix;
+    fn gradient(&mut self, input: &Matrix, target: &Matrix) -> Matrix;
 }

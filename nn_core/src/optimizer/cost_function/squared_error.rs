@@ -5,7 +5,7 @@ use crate::optimizer::cost_function::CostFunction;
 struct SquaredError;
 
 impl CostFunction for SquaredError {
-    fn compute(input: &matrix::Matrix, target: &matrix::Matrix) -> f32 {
+    fn compute(&mut self, input: &matrix::Matrix, target: &matrix::Matrix) -> f32 {
         // squared error for a single sample shoudl be a scalar
         assert_eq!(input.get_shape(), (1, 1));
         assert_eq!(input.get_shape(), target.get_shape());
@@ -14,7 +14,7 @@ impl CostFunction for SquaredError {
         diff_squared.sum()
     }
 
-    fn gradient(input: &matrix::Matrix, target: &matrix::Matrix) -> matrix::Matrix {
+    fn gradient(&mut self, input: &matrix::Matrix, target: &matrix::Matrix) -> matrix::Matrix {
         assert_eq!(input.get_shape(), (1, 1));
         assert_eq!(input.get_shape(), target.get_shape());
 
@@ -33,7 +33,7 @@ mod tests {
         let input = Matrix::new(vec![1.0], (1, 1));
         let target = Matrix::new(vec![3.0], (1, 1));
 
-        let cost = SquaredError::compute(&input, &target);
+        let cost = SquaredError.compute(&input, &target);
         assert_relative_eq!(cost, 4.0, epsilon = 1e-4);
     }
 
@@ -42,7 +42,7 @@ mod tests {
         let input = Matrix::new(vec![1.0], (1, 1));
         let target = Matrix::new(vec![0.0], (1, 1));
 
-        let gradient = SquaredError::gradient(&input, &target);
+        let gradient = SquaredError.gradient(&input, &target);
 
         assert_relative_eq!(gradient.get_value((0, 0)), 2.0, epsilon = 1e-4);
     }
