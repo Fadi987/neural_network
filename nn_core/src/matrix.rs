@@ -306,7 +306,7 @@ impl Matrix {
     /// # Returns
     ///
     /// The resulting matrix after applying the function element-wise.
-    pub fn map<F>(&self, mut f: F) -> Self
+    pub fn map<F>(&self, f: F) -> Self
     where
         F: Fn(f32) -> f32,
     {
