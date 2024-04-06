@@ -115,6 +115,56 @@ impl Matrix {
         self.data[indices.0 * self.shape.1 + indices.1]
     }
 
+    /// Returns the row at the specified index.
+    /// # Arguments
+    ///
+    /// * `row` - The index of the row to retrieve.
+    ///
+    /// # Panics
+    /// This function will panic if the row index is out of bounds.
+    ///
+    /// # Example
+    /// ```
+    /// use nn_core::matrix::Matrix;
+    /// let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let row = matrix.get_row(1);
+    /// ```
+
+    pub fn get_row(&self, row: usize) -> Matrix {
+        assert!(row < self.shape.0);
+        let data = self.data[row * self.shape.1..(row + 1) * self.shape.1].to_vec();
+        Matrix {
+            data,
+            shape: (1, self.shape.1),
+        }
+    }
+
+    /// Returns the column at the specified index.
+    /// # Arguments
+    ///
+    /// * `column` - The index of the column to retrieve.
+    ///
+    /// # Panics
+    ///
+    /// This function will panic if the column index is out of bounds.
+    ///
+    /// # Example
+    /// ```
+    /// use nn_core::matrix::Matrix;
+    /// let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let column = matrix.get_column(1);
+    /// ````
+    pub fn get_column(&self, column: usize) -> Matrix {
+        assert!(column < self.shape.1);
+        let data = (0..self.shape.0)
+            .map(|i| self.data[i * self.shape.1 + column])
+            .collect();
+        Matrix {
+            data,
+            shape: (self.shape.0, 1),
+        }
+    }
+
     /// Transposes the matrix.
     ///
     /// # Returns
@@ -374,6 +424,22 @@ mod tests {
         let result = matrix.transpose();
         assert_eq!(result.data, vec![1.0, 3.0, 2.0, 4.0]);
         assert_eq!(result.shape, (2, 2));
+    }
+
+    #[test]
+    fn test_get_row() {
+        let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+        let result = matrix.get_row(1);
+        assert_eq!(result.data, vec![3.0, 4.0]);
+        assert_eq!(result.shape, (1, 2));
+    }
+
+    #[test]
+    fn test_get_column() {
+        let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+        let result = matrix.get_column(1);
+        assert_eq!(result.data, vec![2.0, 4.0]);
+        assert_eq!(result.shape, (2, 1));
     }
 
     #[test]
