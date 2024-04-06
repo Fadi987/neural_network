@@ -33,10 +33,10 @@ impl FullyConnectedLayer {
     /// use nn_core::layer::fully_connected::FullyConnectedLayer;
     ///
     /// let seed = [42; 32];
-    /// let rng = StdRng::from_seed(seed);
-    /// let layer = FullyConnectedLayer::new((3, 3), rng);
+    /// let mut rng = StdRng::from_seed(seed);
+    /// let layer = FullyConnectedLayer::new((3, 3), &mut rng);
     /// ```
-    pub fn new(shape: (usize, usize), mut rng: impl Rng) -> Self {
+    pub fn new<T: Rng>(shape: (usize, usize), rng: &mut T) -> Self {
         // Xavier Glorot Initialization
         let boundary = (6.0 / ((shape.0 + shape.1) as f32)).sqrt();
 
@@ -107,8 +107,8 @@ mod tests {
 
         for i in 0..100 {
             let seed = [i; 32];
-            let rng = StdRng::from_seed(seed);
-            let layer = FullyConnectedLayer::new((3, 3), rng);
+            let mut rng = StdRng::from_seed(seed);
+            let layer = FullyConnectedLayer::new((3, 3), &mut rng);
             let layer_shape = layer.weights.get_shape();
 
             let layer_values: Vec<f32> = (0..layer_shape.0)

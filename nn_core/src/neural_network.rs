@@ -27,12 +27,23 @@ impl NeuralNetwork {
 
         intermediate_result
     }
+
+    /// Performs the backward pass of the neural network.
+    pub fn backward(&mut self, gradient: &matrix::Matrix) -> matrix::Matrix {
+        let mut intermediate_result = gradient.clone();
+
+        for layer in self.layers.iter_mut().rev() {
+            intermediate_result = layer.backward(&intermediate_result);
+        }
+
+        intermediate_result
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::layer::{activation, fully_connected, Layer};
+    use crate::layer::{activation, fully_connected};
     use rand::rngs::StdRng;
     use rand::SeedableRng;
 
@@ -40,9 +51,9 @@ mod tests {
     fn test_neural_network_forward() {
         let mut network = NeuralNetwork::new();
         let seed = [42; 32];
-        let rng = StdRng::from_seed(seed);
+        let mut rng = StdRng::from_seed(seed);
 
-        let fully_connected_layer = fully_connected::FullyConnectedLayer::new((2, 3), rng);
+        let fully_connected_layer = fully_connected::FullyConnectedLayer::new((2, 3), &mut rng);
         let activation_layer =
             activation::ActivationLayer::new(activation::ActivationFunction::ReLU);
 
@@ -53,5 +64,55 @@ mod tests {
         let output = network.forward(&input);
 
         assert_eq!(output.get_shape(), (2, 1));
+    }
+
+    #[test]
+    fn test_neural_network_forward_multiple_layers() {
+        let mut network = NeuralNetwork::new();
+        let seed = [42; 32];
+        let mut rng = StdRng::from_seed(seed);
+
+        let fully_connected_layer_1 = fully_connected::FullyConnectedLayer::new((2, 3), &mut rng);
+        let activation_layer_1 =
+            activation::ActivationLayer::new(activation::ActivationFunction::ReLU);
+        let fully_connected_layer_2 = fully_connected::FullyConnectedLayer::new((2, 2), &mut rng);
+        let activation_layer_2 =
+            activation::ActivationLayer::new(activation::ActivationFunction::ReLU);
+
+        network.add_layer(fully_connected_layer_1);
+        network.add_layer(activation_layer_1);
+        network.add_layer(fully_connected_layer_2);
+        network.add_layer(activation_layer_2);
+
+        let input = matrix::Matrix::new(vec![1.0, 2.0, 3.0], (3, 1));
+        let output = network.forward(&input);
+
+        assert_eq!(output.get_shape(), (2, 1));
+    }
+
+    #[test]
+    fn test_neural_network_backward() {
+        let mut network = NeuralNetwork::new();
+        let seed = [42; 32];
+        let mut rng = StdRng::from_seed(seed);
+
+        let fully_connected_layer = fully_connected::FullyConnectedLayer::new((2, 3), &mut rng);
+        let activation_layer =
+            activation::ActivationLayer::new(activation::ActivationFunction::ReLU);
+
+        let fully_connected_layer_pre_output =
+            fully_connected::FullyConnectedLayer::new((1, 2), &mut rng);
+
+        network.add_layer(fully_connected_layer);
+        network.add_layer(activation_layer);
+        network.add_layer(fully_connected_layer_pre_output);
+
+        let input = matrix::Matrix::new(vec![1.0, 2.0, 3.0], (3, 1));
+        let _ = network.forward(&input);
+
+        let output_gradient = matrix::Matrix::new(vec![2.0], (1, 1));
+        let input_gradient = network.backward(&output_gradient);
+
+        assert_eq!(input_gradient.get_shape(), (3, 1));
     }
 }
