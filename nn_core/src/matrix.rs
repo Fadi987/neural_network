@@ -316,6 +316,24 @@ impl Matrix {
             shape: self.shape,
         }
     }
+
+    /// Sums all the elements of the matrix.
+    ///
+    /// # Returns
+    ///
+    /// The sum of all the elements in the matrix.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use nn_core::matrix::Matrix;
+    /// let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let sum = matrix.sum();
+    /// assert_eq!(sum, 10.0);
+    /// ```
+    pub fn sum(&self) -> f32 {
+        self.data.iter().sum()
+    }
 }
 
 impl fmt::Display for Matrix {
@@ -392,6 +410,13 @@ mod tests {
         let result = matrix.map(|x| x * 2.0);
         assert_eq!(result.data, vec![2.0, 4.0, 6.0, 8.0]);
         assert_eq!(result.shape, (2, 2));
+    }
+
+    #[test]
+    fn test_sum() {
+        let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+        let result = matrix.sum();
+        assert_eq!(result, 10.0);
     }
 
     #[test]
