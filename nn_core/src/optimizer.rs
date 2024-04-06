@@ -6,7 +6,6 @@ use crate::neural_network;
 pub struct Optimizer<T: cost_function::CostFunction> {
     learning_rate: f32,
     cost_function: Box<T>,
-    neural_network: neural_network::NeuralNetwork,
 }
 
 impl<T: cost_function::CostFunction> Optimizer<T> {
@@ -39,11 +38,16 @@ impl<T: cost_function::CostFunction> Optimizer<T> {
     ///
     /// * `input` - The input matrix representing the example.
     /// * `target` - The target matrix representing the expected output.
-    pub fn train_on_example(&mut self, input: &matrix::Matrix, target: &matrix::Matrix) {
-        let output = self.neural_network.forward(input);
+    pub fn train_on_example(
+        &mut self,
+        neural_network: &mut neural_network::NeuralNetwork,
+        input: &matrix::Matrix,
+        target: &matrix::Matrix,
+    ) {
+        let output = neural_network.forward(input);
         let gradient = self.cost_function.gradient(&output, target);
-        let _ = self.neural_network.backward(&gradient);
-        self.neural_network.update(self.learning_rate);
+        let _ = neural_network.backward(&gradient);
+        neural_network.update(self.learning_rate);
     }
 
     /// Trains the neural network on a sample of examples.
@@ -57,12 +61,17 @@ impl<T: cost_function::CostFunction> Optimizer<T> {
     ///
     /// This method will panic if the number of rows in `rhs` is not equal to the number of rows in `lhs`,
     /// or if the number of columns in `lhs` is not equal to 1.
-    pub fn train_on_sample(&mut self, rhs: &matrix::Matrix, lhs: &matrix::Matrix) {
+    pub fn train_on_sample(
+        &mut self,
+        neural_network: &mut neural_network::NeuralNetwork,
+        rhs: &matrix::Matrix,
+        lhs: &matrix::Matrix,
+    ) {
         assert_eq!(rhs.get_shape().0, lhs.get_shape().0);
         assert_eq!(lhs.get_shape().1, 1);
 
         for i in 0..rhs.get_shape().0 {
-            self.train_on_example(&rhs.get_row(i).transpose(), &lhs.get_row(i));
+            self.train_on_example(neural_network, &rhs.get_row(i).transpose(), &lhs.get_row(i));
         }
     }
 }
