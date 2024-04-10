@@ -1,7 +1,6 @@
 use nn_core::matrix;
 use pyo3::prelude::*;
-use pyo3::types::PyFunction;
-use pyo3::Python;
+use pyo3::types::{PyFunction, PyList};
 
 #[pyclass]
 pub struct PyMatrix {
@@ -14,6 +13,13 @@ impl PyMatrix {
     pub fn zeros(shape: (usize, usize)) -> Self {
         PyMatrix {
             matrix: matrix::Matrix::zeros(shape),
+        }
+    }
+
+    #[staticmethod]
+    pub fn from_row_major(data: &Bound<'_, PyList>, shape: (usize, usize)) -> Self {
+        PyMatrix {
+            matrix: matrix::Matrix::from_row_major(data.extract().unwrap(), shape),
         }
     }
 
