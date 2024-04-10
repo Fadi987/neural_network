@@ -105,7 +105,7 @@ mod tests {
     #[test]
     fn test_activation_layer_forward() {
         let mut layer = ActivationLayer::new(ActivationFunction::Sigmoid);
-        let input = Matrix::new(vec![-1.0, 0.0, 1.0, 2.0], (2, 2));
+        let input = Matrix::from_row_major(vec![-1.0, 0.0, 1.0, 2.0], (2, 2));
         let output = layer.forward(&input);
 
         assert_relative_eq!(output.get_value((0, 0)), 0.2689, epsilon = 1e-4);

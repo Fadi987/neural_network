@@ -44,7 +44,7 @@ impl FullyConnectedLayer {
 
         FullyConnectedLayer {
             weights,
-            biases: matrix::Matrix::new(vec![0.0; shape.0], (shape.0, 1)),
+            biases: matrix::Matrix::from_row_major(vec![0.0; shape.0], (shape.0, 1)),
             weights_gradient: None,
             biases_gradient: None,
             forward_pass_input: None,
@@ -164,14 +164,14 @@ mod tests {
     #[test]
     fn test_fully_connected_layer_forward() {
         let mut layer = FullyConnectedLayer {
-            weights: matrix::Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2)),
-            biases: matrix::Matrix::new(vec![1.0, 2.0], (2, 1)),
+            weights: matrix::Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2)),
+            biases: matrix::Matrix::from_row_major(vec![1.0, 2.0], (2, 1)),
             weights_gradient: None,
             biases_gradient: None,
             forward_pass_input: None,
         };
 
-        let input = matrix::Matrix::new(vec![1.0, 2.0], (2, 1));
+        let input = matrix::Matrix::from_row_major(vec![1.0, 2.0], (2, 1));
         let output = layer.forward(&input);
 
         assert_eq!(output.get_shape(), (2, 1));
@@ -182,21 +182,21 @@ mod tests {
     #[test]
     fn test_fully_connected_layer_backward() {
         let mut layer = FullyConnectedLayer {
-            weights: matrix::Matrix::new(vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0], (2, 3)),
-            biases: matrix::Matrix::new(vec![1.0, 2.0], (2, 1)),
+            weights: matrix::Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0], (2, 3)),
+            biases: matrix::Matrix::from_row_major(vec![1.0, 2.0], (2, 1)),
             weights_gradient: None,
             biases_gradient: None,
             forward_pass_input: None,
         };
 
-        let input = matrix::Matrix::new(vec![1.0, 2.0, 3.0], (3, 1));
+        let input = matrix::Matrix::from_row_major(vec![1.0, 2.0, 3.0], (3, 1));
         let output = layer.forward(&input);
 
         assert_eq!(output.get_shape(), (2, 1));
         assert_relative_eq!(output.get_value((0, 0)), 15.0, epsilon = 1e-4);
         assert_relative_eq!(output.get_value((1, 0)), 34.0, epsilon = 1e-4);
 
-        let gradient = matrix::Matrix::new(vec![1.0, 2.0], (2, 1));
+        let gradient = matrix::Matrix::from_row_major(vec![1.0, 2.0], (2, 1));
         let backward_output = layer.backward(&gradient);
 
         assert_eq!(backward_output.get_shape(), (3, 1));
@@ -223,13 +223,13 @@ mod tests {
     #[test]
     fn test_fully_connected_layer_update() {
         let mut layer = FullyConnectedLayer {
-            weights: matrix::Matrix::new(vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0], (2, 3)),
-            biases: matrix::Matrix::new(vec![1.0, 2.0], (2, 1)),
-            weights_gradient: Some(matrix::Matrix::new(
+            weights: matrix::Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0], (2, 3)),
+            biases: matrix::Matrix::from_row_major(vec![1.0, 2.0], (2, 1)),
+            weights_gradient: Some(matrix::Matrix::from_row_major(
                 vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0],
                 (2, 3),
             )),
-            biases_gradient: Some(matrix::Matrix::new(vec![1.0, 2.0], (2, 1))),
+            biases_gradient: Some(matrix::Matrix::from_row_major(vec![1.0, 2.0], (2, 1))),
             forward_pass_input: None,
         };
 

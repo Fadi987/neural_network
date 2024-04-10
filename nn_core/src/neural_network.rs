@@ -67,7 +67,7 @@ mod tests {
         network.add_layer(fully_connected_layer);
         network.add_layer(activation_layer);
 
-        let input = matrix::Matrix::new(vec![1.0, 2.0, 3.0], (3, 1));
+        let input = matrix::Matrix::from_row_major(vec![1.0, 2.0, 3.0], (3, 1));
         let output = network.forward(&input);
 
         assert_eq!(output.get_shape(), (2, 1));
@@ -91,7 +91,7 @@ mod tests {
         network.add_layer(fully_connected_layer_2);
         network.add_layer(activation_layer_2);
 
-        let input = matrix::Matrix::new(vec![1.0, 2.0, 3.0], (3, 1));
+        let input = matrix::Matrix::from_row_major(vec![1.0, 2.0, 3.0], (3, 1));
         let output = network.forward(&input);
 
         assert_eq!(output.get_shape(), (2, 1));
@@ -114,10 +114,10 @@ mod tests {
         network.add_layer(activation_layer);
         network.add_layer(fully_connected_layer_pre_output);
 
-        let input = matrix::Matrix::new(vec![1.0, 2.0, 3.0], (3, 1));
+        let input = matrix::Matrix::from_row_major(vec![1.0, 2.0, 3.0], (3, 1));
         let _ = network.forward(&input);
 
-        let output_gradient = matrix::Matrix::new(vec![2.0], (1, 1));
+        let output_gradient = matrix::Matrix::from_row_major(vec![2.0], (1, 1));
         let input_gradient = network.backward(&output_gradient);
 
         assert_eq!(input_gradient.get_shape(), (3, 1));

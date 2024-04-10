@@ -30,8 +30,8 @@ mod tests {
 
     #[test]
     fn test_squared_error_compute() {
-        let input = Matrix::new(vec![1.0], (1, 1));
-        let target = Matrix::new(vec![3.0], (1, 1));
+        let input = Matrix::from_row_major(vec![1.0], (1, 1));
+        let target = Matrix::from_row_major(vec![3.0], (1, 1));
 
         let cost = SquaredError.compute(&input, &target);
         assert_relative_eq!(cost, 4.0, epsilon = 1e-4);
@@ -39,8 +39,8 @@ mod tests {
 
     #[test]
     fn test_squared_error_gradient() {
-        let input = Matrix::new(vec![1.0], (1, 1));
-        let target = Matrix::new(vec![0.0], (1, 1));
+        let input = Matrix::from_row_major(vec![1.0], (1, 1));
+        let target = Matrix::from_row_major(vec![0.0], (1, 1));
 
         let gradient = SquaredError.gradient(&input, &target);
 

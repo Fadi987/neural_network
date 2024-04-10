@@ -66,9 +66,9 @@ impl Matrix {
     /// ```
     /// use nn_core::matrix::Matrix;
     /// let data = vec![1.0, 2.0, 3.0, 4.0];
-    /// let matrix = Matrix::new(data, (2, 2));
+    /// let matrix = Matrix::from_row_major(data, (2, 2));
     /// ```
-    pub fn new(data: Vec<f32>, shape: (usize, usize)) -> Self {
+    pub fn from_row_major(data: Vec<f32>, shape: (usize, usize)) -> Self {
         assert_eq!(
             data.len(),
             shape.0 * shape.1,
@@ -106,7 +106,7 @@ impl Matrix {
     ///
     /// ```
     /// use nn_core::matrix::Matrix;
-    /// let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let matrix = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
     /// let value = matrix.get_value((1, 0));
     /// assert_eq!(value, 3.0);
     /// ```
@@ -126,7 +126,7 @@ impl Matrix {
     /// # Example
     /// ```
     /// use nn_core::matrix::Matrix;
-    /// let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let matrix = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
     /// let row = matrix.get_row(1);
     /// ```
 
@@ -151,7 +151,7 @@ impl Matrix {
     /// # Example
     /// ```
     /// use nn_core::matrix::Matrix;
-    /// let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let matrix = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
     /// let column = matrix.get_column(1);
     /// ````
     pub fn get_column(&self, column: usize) -> Matrix {
@@ -175,7 +175,7 @@ impl Matrix {
     ///
     /// ```
     /// use nn_core::matrix::Matrix;
-    /// let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let matrix = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
     /// let transposed = matrix.transpose();
     /// ```
     pub fn transpose(&self) -> Self {
@@ -205,8 +205,8 @@ impl Matrix {
     ///
     /// ```
     /// use nn_core::matrix::Matrix;
-    /// let matrix_a = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
-    /// let matrix_b = Matrix::new(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
+    /// let matrix_a = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let matrix_b = Matrix::from_row_major(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
     /// let result = Matrix::add(&matrix_a, &matrix_b);
     /// ```
     pub fn add(matrix_a: &Matrix, matrix_b: &Matrix) -> Self {
@@ -243,8 +243,8 @@ impl Matrix {
     ///
     /// ```
     /// use nn_core::matrix::Matrix;
-    /// let matrix_a = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
-    /// let matrix_b = Matrix::new(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
+    /// let matrix_a = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let matrix_b = Matrix::from_row_major(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
     /// let result = Matrix::sub(&matrix_a, &matrix_b);
     /// ```
     pub fn sub(matrix_a: &Matrix, matrix_b: &Matrix) -> Self {
@@ -281,8 +281,8 @@ impl Matrix {
     ///
     /// ```
     /// use nn_core::matrix::Matrix;
-    /// let matrix_a = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
-    /// let matrix_b = Matrix::new(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
+    /// let matrix_a = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let matrix_b = Matrix::from_row_major(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
     /// let result = Matrix::mul(&matrix_a, &matrix_b);
     /// ```
     pub fn mul(matrix_a: &Matrix, matrix_b: &Matrix) -> Self {
@@ -319,8 +319,8 @@ impl Matrix {
     ///
     /// ```
     /// use nn_core::matrix::Matrix;
-    /// let matrix_a = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
-    /// let matrix_b = Matrix::new(vec![2.0, 0.0, 1.0, 3.0], (2, 2));
+    /// let matrix_a = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let matrix_b = Matrix::from_row_major(vec![2.0, 0.0, 1.0, 3.0], (2, 2));
     /// let result = Matrix::dot(&matrix_a, &matrix_b);
     /// ```
     pub fn dot(matrix_a: &Matrix, matrix_b: &Matrix) -> Self {
@@ -390,7 +390,7 @@ impl Matrix {
     ///
     /// ```
     /// use nn_core::matrix::Matrix;
-    /// let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+    /// let matrix = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
     /// let sum = matrix.sum();
     /// assert_eq!(sum, 10.0);
     /// ```
@@ -433,7 +433,7 @@ mod tests {
 
     #[test]
     fn test_transpose() {
-        let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+        let matrix = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
         let result = matrix.transpose();
         assert_eq!(result.data, vec![1.0, 3.0, 2.0, 4.0]);
         assert_eq!(result.shape, (2, 2));
@@ -441,7 +441,7 @@ mod tests {
 
     #[test]
     fn test_get_row() {
-        let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+        let matrix = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
         let result = matrix.get_row(1);
         assert_eq!(result.data, vec![3.0, 4.0]);
         assert_eq!(result.shape, (1, 2));
@@ -449,7 +449,7 @@ mod tests {
 
     #[test]
     fn test_get_column() {
-        let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+        let matrix = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
         let result = matrix.get_column(1);
         assert_eq!(result.data, vec![2.0, 4.0]);
         assert_eq!(result.shape, (2, 1));
@@ -457,8 +457,8 @@ mod tests {
 
     #[test]
     fn test_addition() {
-        let matrix_a = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
-        let matrix_b = Matrix::new(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
+        let matrix_a = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+        let matrix_b = Matrix::from_row_major(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
         let result = Matrix::add(&matrix_a, &matrix_b);
         assert_eq!(result.data, vec![5.0, 5.0, 5.0, 5.0]);
         assert_eq!(result.shape, (2, 2));
@@ -466,8 +466,8 @@ mod tests {
 
     #[test]
     fn test_subtraction() {
-        let matrix_a = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
-        let matrix_b = Matrix::new(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
+        let matrix_a = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+        let matrix_b = Matrix::from_row_major(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
         let result = Matrix::sub(&matrix_a, &matrix_b);
         assert_eq!(result.data, vec![-3.0, -1.0, 1.0, 3.0]);
         assert_eq!(result.shape, (2, 2));
@@ -475,8 +475,8 @@ mod tests {
 
     #[test]
     fn test_multiplication() {
-        let matrix_a = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
-        let matrix_b = Matrix::new(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
+        let matrix_a = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+        let matrix_b = Matrix::from_row_major(vec![4.0, 3.0, 2.0, 1.0], (2, 2));
         let result = Matrix::mul(&matrix_a, &matrix_b);
         assert_eq!(result.data, vec![4.0, 6.0, 6.0, 4.0]);
         assert_eq!(result.shape, (2, 2));
@@ -485,7 +485,7 @@ mod tests {
     // Test applying a function element-wise to a matrix
     #[test]
     fn test_map() {
-        let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+        let matrix = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
         let result = matrix.map(|x| x * 2.0);
         assert_eq!(result.data, vec![2.0, 4.0, 6.0, 8.0]);
         assert_eq!(result.shape, (2, 2));
@@ -493,7 +493,7 @@ mod tests {
 
     #[test]
     fn test_mul_scalar() {
-        let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+        let matrix = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
         let result = matrix.mul_scalar(2.0);
         assert_eq!(result.data, vec![2.0, 4.0, 6.0, 8.0]);
         assert_eq!(result.shape, (2, 2));
@@ -501,7 +501,7 @@ mod tests {
 
     #[test]
     fn test_sum() {
-        let matrix = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
+        let matrix = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2));
         let result = matrix.sum();
         assert_eq!(result, 10.0);
     }
@@ -509,11 +509,11 @@ mod tests {
     #[test]
     fn test_dot_product() {
         // Create two matrices for the test
-        let matrix_a = Matrix::new(vec![1.0, 2.0, 3.0, 4.0], (2, 2)); // 2x2 matrix
-        let matrix_b = Matrix::new(vec![2.0, 0.0, 1.0, 3.0], (2, 2)); // 2x2 matrix
+        let matrix_a = Matrix::from_row_major(vec![1.0, 2.0, 3.0, 4.0], (2, 2)); // 2x2 matrix
+        let matrix_b = Matrix::from_row_major(vec![2.0, 0.0, 1.0, 3.0], (2, 2)); // 2x2 matrix
 
         // Expected result of the dot product
-        let expected = Matrix::new(vec![4.0, 6.0, 10.0, 12.0], (2, 2)); // 2x2 matrix
+        let expected = Matrix::from_row_major(vec![4.0, 6.0, 10.0, 12.0], (2, 2)); // 2x2 matrix
 
         // Perform the dot product
         let result = Matrix::dot(&matrix_a, &matrix_b);
