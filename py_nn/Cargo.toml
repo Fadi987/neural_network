@@ -7,10 +7,13 @@ edition = "2021"
 
 [dependencies]
 nn_core = { path = "../nn_core" }
+pyo3 = { version = "0.21" }
+
+[features]
+extension-module = ["pyo3/extension-module"]
 
 [lib]
 crate-type = ["cdylib"]
-pyo3 = { version = "0.21", features = ["extension-module"] }
 
 [build-dependencies]
 maturin = "1.5"
