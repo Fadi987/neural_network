@@ -1,8 +1,8 @@
 use pyo3::prelude::*;
-pub mod pymatrix;
+pub mod matrix;
 
 #[pymodule]
 fn py_nn(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add_class::<pymatrix::PyMatrix>()?;
+    m.add_class::<matrix::Matrix>()?;
     Ok(())
 }
