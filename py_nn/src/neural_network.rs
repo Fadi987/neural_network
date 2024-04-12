@@ -2,6 +2,8 @@ use crate::matrix;
 use nn_core::neural_network;
 use pyo3::prelude::*;
 
+pub mod layer;
+
 #[pyclass]
 pub struct NeuralNetwork {
     neural_network: neural_network::NeuralNetwork,
