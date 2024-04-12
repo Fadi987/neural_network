@@ -1357,6 +1357,7 @@ dependencies = [
  "maturin",
  "nn_core",
  "pyo3",
+ "rand",
 ]
 
 [[package]]
