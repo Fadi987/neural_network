@@ -4,7 +4,7 @@ use crate::matrix;
 pub mod activation;
 pub mod fully_connected;
 /// A trait for neural network layers.
-pub trait Layer {
+pub trait Layer: Send {
     fn forward(&mut self, input: &matrix::Matrix) -> matrix::Matrix;
 
     fn backward(&mut self, gradient: &matrix::Matrix) -> matrix::Matrix;

@@ -4,7 +4,13 @@ use pyo3::types::{PyFunction, PyList};
 
 #[pyclass]
 pub struct Matrix {
-    matrix: matrix::Matrix,
+    pub matrix: matrix::Matrix,
+}
+
+impl Matrix {
+    pub fn get_matrix(&self) -> &matrix::Matrix {
+        &self.matrix
+    }
 }
 
 #[pymethods]
