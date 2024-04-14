@@ -18,4 +18,17 @@ impl MseOptimizer {
             ),
         }
     }
+
+    pub fn train_on_sample(
+        &mut self,
+        neural_network: &mut crate::neural_network::NeuralNetwork,
+        input: &matrix::Matrix,
+        target: &matrix::Matrix,
+    ) {
+        self.optimizer.train_on_sample(
+            &mut neural_network.neural_network,
+            &input.matrix,
+            &target.matrix,
+        );
+    }
 }

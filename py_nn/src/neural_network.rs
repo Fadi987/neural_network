@@ -6,7 +6,7 @@ use pyo3::prelude::*;
 
 #[pyclass]
 pub struct NeuralNetwork {
-    neural_network: neural_network::NeuralNetwork,
+    pub neural_network: neural_network::NeuralNetwork,
 }
 
 #[pymethods]
