@@ -33,7 +33,7 @@ impl<T: cost_function::CostFunction> Optimizer<T> {
     ///
     /// * `input` - The input matrix representing the example.
     /// * `target` - The target matrix representing the expected output.
-    pub fn train_on_example(
+    fn train_on_example(
         &mut self,
         neural_network: &mut neural_network::NeuralNetwork,
         input: &matrix::Matrix,
