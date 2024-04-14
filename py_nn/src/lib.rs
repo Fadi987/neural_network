@@ -7,5 +7,6 @@ pub mod optimizer;
 fn py_nn(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<matrix::Matrix>()?;
     m.add_class::<neural_network::NeuralNetwork>()?;
+    m.add_class::<optimizer::MseOptimizer>()?;
     Ok(())
 }
