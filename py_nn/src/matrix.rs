@@ -29,6 +29,13 @@ impl Matrix {
         }
     }
 
+    #[staticmethod]
+    pub fn from_2d_vector(data: &Bound<'_, PyList>) -> Self {
+        Matrix {
+            matrix: matrix::Matrix::from_2d_vector(data.extract().unwrap()),
+        }
+    }
+
     pub fn get_row(&self, index: usize) -> Matrix {
         Matrix {
             matrix: self.matrix.get_row(index),
