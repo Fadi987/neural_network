@@ -78,6 +78,27 @@ impl Matrix {
         Matrix { data, shape }
     }
 
+    /// Creates a new matrix from a 2D vector.
+    /// # Arguments
+    ///
+    /// * `data` - The 2D vector to create the matrix from.
+    ///
+    /// # Example
+    /// ```
+    /// use nn_core::matrix::Matrix;
+    /// let data = vec![vec![1.0, 2.0], vec![3.0, 4.0]];
+    /// let matrix = Matrix::from_2d_vector(data);
+    /// ```
+    pub fn from_2d_vector(data: Vec<Vec<f32>>) -> Self {
+        if data.is_empty() {
+            return Matrix::zeros((0, 0));
+        }
+
+        let shape = (data.len(), data[0].len());
+        let data = data.into_iter().flatten().collect();
+        Matrix { data, shape }
+    }
+
     /// Returns the shape of the matrix.
     ///
     /// # Example
@@ -420,6 +441,14 @@ mod tests {
     fn test_zeros() {
         let result = Matrix::zeros((2, 2));
         assert_eq!(result.data, vec![0.0, 0.0, 0.0, 0.0]);
+        assert_eq!(result.shape, (2, 2));
+    }
+
+    #[test]
+    fn test_from_2d_vector() {
+        let data = vec![vec![1.0, 2.0], vec![3.0, 4.0]];
+        let result = Matrix::from_2d_vector(data);
+        assert_eq!(result.data, vec![1.0, 2.0, 3.0, 4.0]);
         assert_eq!(result.shape, (2, 2));
     }
 
