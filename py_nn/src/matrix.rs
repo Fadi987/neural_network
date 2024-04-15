@@ -36,6 +36,14 @@ impl Matrix {
         }
     }
 
+    pub fn get_shape(&self) -> (usize, usize) {
+        self.matrix.get_shape()
+    }
+
+    pub fn get_value(&self, indices: (usize, usize)) -> f32 {
+        self.matrix.get_value(indices)
+    }
+
     pub fn get_row(&self, index: usize) -> Matrix {
         Matrix {
             matrix: self.matrix.get_row(index),
