@@ -41,6 +41,8 @@ To run tests, use
 cargo test
 ```
 
+Note: **_Tests may fail to run if you are within a python virtual environment depending on environment setup. Make sure to `deactivate` virtual environment before running tests._**
+
 ### Using the Python Bindings
 
 Navigate to `py_nn/`
@@ -49,13 +51,13 @@ Navigate to `py_nn/`
 cd py_nn
 ```
 
-Install the Python module with maturin
+Activate a Python virtual environment then install the Python module with maturin
 
 ```bash
 maturin develop --features "extension-module"
 ```
 
-For the maturin command to work, you have to be within a virtual python environment to begin with. The module `py_nn` will then be added to the environment.
+**_For the maturin command to work, you have to be within a virtual python environment to begin with._** The module `py_nn` will then be added to the virtual environment.
 
 ### Jupyter Notebook Demos
 
