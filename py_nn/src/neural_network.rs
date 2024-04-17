@@ -60,4 +60,10 @@ impl NeuralNetwork {
     pub fn update(&mut self, learning_rate: f32) {
         self.neural_network.update(learning_rate);
     }
+
+    pub fn predict(&mut self, sample: &matrix::Matrix) -> matrix::Matrix {
+        matrix::Matrix {
+            matrix: self.neural_network.predict(&sample.matrix),
+        }
+    }
 }

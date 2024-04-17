@@ -100,6 +100,10 @@ impl Matrix {
         }
     }
 
+    pub fn to_2d_list(&self) -> Vec<Vec<f32>> {
+        self.matrix.to_2d_vec()
+    }
+
     pub fn sum(&self) -> f32 {
         self.matrix.sum()
     }
