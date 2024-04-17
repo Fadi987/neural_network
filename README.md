@@ -41,7 +41,7 @@ To run tests, use
 cargo test
 ```
 
-Note: **_Tests may fail to run if you are within a python virtual environment depending on environment setup. Make sure to `deactivate` virtual environment before running tests._**
+**_Note that tests may fail to run if you are within a python virtual environment depending on environment setup. Make sure to `deactivate` virtual environment before running tests._**
 
 ### Using the Python Bindings
 
