@@ -63,5 +63,5 @@ maturin develop --features "extension-module"
 
 To view Jupyter notebook demos, navigate to the `py_examples/` directory. Examples indclude:
 
-- `linear_function.ipynb` : Demonstrates a simple linear function fit.
-- `non_linear_function.ipynb`: Demonstrates a cubic function fit using `ReLU` activation function.
+- `linear.ipynb` : Demonstrates a simple linear function fit.
+- `cubic.ipynb`: Demonstrates a cubic function fit using `ReLU` activation function.
