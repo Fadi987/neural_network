@@ -418,6 +418,33 @@ impl Matrix {
     pub fn sum(&self) -> f32 {
         self.data.iter().sum()
     }
+
+    /// Concatenates a list of matrices vertically.
+    pub fn concat_vertical(matrices: Vec<Self>) -> Self {
+        let mut data = Vec::new();
+        let mut shape = (0, 0);
+        for matrix in matrices {
+            if shape.1 == 0 {
+                shape.1 = matrix.shape.1;
+            } else {
+                assert_eq!(
+                    shape.1, matrix.shape.1,
+                    "Cannot concatenate matrices vertically with different number of columns."
+                );
+            }
+            shape.0 += matrix.shape.0;
+            data.extend(matrix.data.iter().cloned());
+        }
+        Matrix { data, shape }
+    }
+
+    /// Converts the matrix to a 2D vector.
+    pub fn to_2d_vec(&self) -> Vec<Vec<f32>> {
+        self.data
+            .chunks(self.shape.1)
+            .map(|chunk| chunk.to_vec())
+            .collect()
+    }
 }
 
 impl fmt::Display for Matrix {
@@ -550,5 +577,14 @@ mod tests {
         // Check if the result matches the expected outcome
         assert_eq!(result.data, expected.data);
         assert_eq!(result.shape, expected.shape);
+    }
+
+    #[test]
+    fn test_concat_vertical() {
+        let matrix_a = Matrix::from_row_major(vec![1.0, 2.0], (1, 2));
+        let matrix_b = Matrix::from_row_major(vec![3.0, 4.0], (1, 2));
+        let result = Matrix::concat_vertical(vec![matrix_a, matrix_b]);
+        assert_eq!(result.data, vec![1.0, 2.0, 3.0, 4.0]);
+        assert_eq!(result.shape, (2, 2));
     }
 }

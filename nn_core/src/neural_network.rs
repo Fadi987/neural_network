@@ -45,6 +45,15 @@ impl NeuralNetwork {
             layer.update(learning_rate);
         }
     }
+
+    /// Predicts the predictions of the neural network for the given sample.
+    pub fn predict(&mut self, sample: &matrix::Matrix) -> matrix::Matrix {
+        let predictions: Vec<matrix::Matrix> = (0..sample.get_shape().0)
+            .map(|example| self.forward(&sample.get_row(example).transpose()))
+            .collect();
+
+        matrix::Matrix::concat_vertical(predictions)
+    }
 }
 
 #[cfg(test)]
