@@ -61,8 +61,5 @@ For the maturin command to work, you have to be within a virtual python environm
 
 To view Jupyter notebook demos, navigate to the `py_examples/` directory. Examples indclude:
 
-<ul>
-  <li><b>MCTS Algorithm:</b> Employs Monte Carlo Tree Search for robust and efficient game decision-making.</li>
-  <li><b>Rust Implementation:</b> Built with Rust for potential of efficient memory management and performance.</li>
-  <li><b>Interactive Game:</b> Allows users to play against the AI in a simple terminal interface.</li>
-</ul>
+- `linear_function.ipynb` : Demonstrates a simple linear function fit.
+- `non_linear_function.ipynb`: Demonstrates a cubic function fit using `ReLU` activation function.
