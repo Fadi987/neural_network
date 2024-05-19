@@ -78,3 +78,5 @@ was used. Here is the NN function + data before training:
 And here's the fitted NN function after a bit of training
 
 ![](img/cubic_before_epoch_90.png)
+
+which is a convincing test case that the NN framework is working correctly (in addition to all the automated testing, of course).
