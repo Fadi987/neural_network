@@ -65,3 +65,16 @@ To view Jupyter notebook demos, navigate to the `py_examples/` directory. Exampl
 
 - `linear.ipynb` : Demonstrates a simple linear function fit.
 - `cubic.ipynb`: Demonstrates a cubic function fit using `ReLU` activation function.
+
+In `cubic.ipynb`, sample was generated as synthetic data of a cubic function + some noise. To fit the data, a simple neural network of:
+
+- two fully-connected layers, and
+- one ReLU activation layer
+
+was used. Here is the NN function + data before training:
+
+![](img/cubic_before_epoch_0.png)
+
+And here's the fitted NN function after a bit of training
+
+![](img/cubic_before_epoch_90.png)
